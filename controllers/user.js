@@ -27,7 +27,9 @@ export const userLogin = async (req, res) => {
     const decodePass = await bcrypt.compare(password, user.password);
     if (decodePass) {
       const token = jwt.sign(user.id, 'loginToken');
-      res.json({ user, token: token });
+
+      // res.cookie('_id', token).json({ user, token: token });
+      res.cookie('token', token, { sameSite: 'none', secure: true }).json({ success: true, message: 'logged' });
     } else {
       res.status(500).json({ message: 'Invalid Credentials!' });
     }
